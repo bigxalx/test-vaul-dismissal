@@ -1,103 +1,189 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { clsx } from "clsx";
+import { useState } from "react";
+import { Drawer } from "vaul";
+
+const snapPoints = ["148px", "355px", 1];
+
+export default function VaulDrawer() {
+  const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main>
+      <Drawer.Root
+        snapPoints={snapPoints}
+        activeSnapPoint={snap}
+        setActiveSnapPoint={setSnap}
+        modal={false}
+        preventScrollRestoration={false}
+      >
+        <Drawer.Trigger className="relative flex h-10 flex-shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full bg-white px-4 text-sm font-medium shadow-sm transition-all hover:bg-[#FAFAFA] dark:bg-[#161615] dark:hover:bg-[#1A1A19]">
+          Open Drawer
+        </Drawer.Trigger>
+        <Drawer.Overlay className="fixed inset-0 bg-black/40" />
+        <Drawer.Portal>
+          <Drawer.Content
+            data-testid="content"
+            className="border-b-none fixed bottom-0 left-0 right-0 mx-[-1px] flex h-full max-h-[97%] flex-col rounded-t-[10px] border border-gray-200 bg-white"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            <div
+              className={clsx(
+                "mx-auto flex w-full max-w-md flex-col p-4 pt-5",
+                {
+                  "overflow-y-auto": snap === 1,
+                  "overflow-hidden": snap !== 1,
+                }
+              )}
+            >
+              <div className="flex items-center">
+                <svg
+                  className="h-5 w-5 flex-shrink-0 text-yellow-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+                <svg
+                  className="h-5 w-5 flex-shrink-0 text-yellow-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+                <svg
+                  className="h-5 w-5 flex-shrink-0 text-yellow-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+                <svg
+                  className="h-5 w-5 flex-shrink-0 text-yellow-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+                <svg
+                  className="h-5 w-5 flex-shrink-0 text-gray-300"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+              </div>{" "}
+              <Drawer.Title className="mt-2 text-2xl font-medium text-gray-900">
+                The Hidden Details
+              </Drawer.Title>
+              <p className="mb-6 mt-1 text-sm text-gray-600">
+                2 modules, 27 hours of video
+              </p>
+              <p className="text-gray-600">
+                The world of user interface design is an intricate landscape
+                filled with hidden details and nuance. In this course, you will
+                learn something cool. To the untrained eye, a beautifully
+                designed UI.
+              </p>
+              <button className="mt-8 h-[48px] flex-shrink-0 rounded-md bg-black font-medium text-gray-50">
+                Buy for $199
+              </button>
+              <div className="mt-12">
+                <h2 className="text-xl font-medium text-gray-900">
+                  Module 01. The Details
+                </h2>
+                <div className="mt-4 space-y-4">
+                  <div>
+                    <span className="block text-gray-900">Layers of UI</span>
+                    <span className="text-gray-600">
+                      A basic introduction to Layers of Design.
+                    </span>
+                  </div>
+                  <div>
+                    <span className="block text-gray-900">Typography</span>
+                    <span className="text-gray-600">
+                      The fundamentals of type.
+                    </span>
+                  </div>
+                  <div>
+                    <span className="block text-gray-900">UI Animations</span>
+                    <span className="text-gray-600">
+                      Going through the right easings and durations.
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-12">
+                <figure>
+                  <blockquote className="font-serif text-gray-900">
+                    “I especially loved the hidden details video. That was so
+                    useful, learned a lot by just reading it. Can&rsquo;t wait
+                    for more course content!”
+                  </blockquote>
+                  <figcaption>
+                    <span className="mt-2 block text-sm text-gray-600">
+                      Yvonne Ray, Frontend Developer
+                    </span>
+                  </figcaption>
+                </figure>
+              </div>
+              <div className="mt-12">
+                <h2 className="text-xl font-medium text-gray-900">
+                  Module 02. The Process
+                </h2>
+                <div className="mt-4 space-y-4">
+                  <div>
+                    <span className="block text-gray-900">Build</span>
+                    <span className="text-gray-600">
+                      Create cool components to practice.
+                    </span>
+                  </div>
+                  <div>
+                    <span className="block text-gray-900">User Insight</span>
+                    <span className="text-gray-600">
+                      Find out what users think and fine-tune.
+                    </span>
+                  </div>
+                  <div>
+                    <span className="block text-gray-900">
+                      Putting it all together
+                    </span>
+                    <span className="text-gray-600">
+                      Let&apos;s build an app together and apply everything.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Drawer.Content>
+        </Drawer.Portal>
+      </Drawer.Root>
+      <div className="h-[300vh]"></div>
+    </main>
   );
 }
