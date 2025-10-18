@@ -23,6 +23,7 @@ export default function VaulDrawer() {
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
         <Drawer.Portal>
           <Drawer.Content
+            onOpenAutoFocus={(event) => event.preventDefault()}
             data-testid="content"
             className="border-b-none fixed bottom-0 left-0 right-0 mx-[-1px] flex h-full max-h-[97%] flex-col rounded-t-[10px] border border-gray-200 bg-white"
           >
